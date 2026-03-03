@@ -49,7 +49,6 @@ public class HttpServer {
         String method = parts.length > 0 ? parts[0] : "";
         String target = parts.length > 1 ? parts[1] : "/";
 
-        // Leer headers hasta línea vacía
         String line;
         while ((line = in.readLine()) != null) {
             if (line.isEmpty()) break;
@@ -67,7 +66,6 @@ public class HttpServer {
             return;
         }
 
-        // 1) REST route
         RouteHandler handler = router.matchGet(path);
         if (handler != null) {
             String body = handler.handle(req, res);
@@ -75,14 +73,14 @@ public class HttpServer {
             return;
         }
 
-        // 2) Static file
-        byte[] fileBytes = staticFiles.load(path);
-        if (fileBytes != null) {
-            sendBytes(out, 200, staticFiles.contentType(path), fileBytes);
-            return;
-        }
 
-        // 3) 404
+        byte[] fileBytes = staticFiles.load(path);
+            if (fileBytes != null) {
+                String ctPath = path.equals("/") ? "/index.html" : path;
+                sendBytes(out, 200, staticFiles.contentType(ctPath), fileBytes);
+            return;
+    }
+
         sendText(out, 404, "text/plain; charset=utf-8", "Not Found");
     }
 
