@@ -6,8 +6,8 @@ public class WebApp {
     public static void main(String[] args) throws Exception {
         HttpServer server = new HttpServer();
 
-        server.staticfiles("/webroot");   // resources/webroot
-        server.setBasePrefix("/App");     // prefijo sugerido
+        server.staticfiles("/webroot");
+        server.setBasePrefix("/App");
 
         server.get("/hello", (req, resp) -> "Hello " + req.getValues("name"));
         server.get("/pi", (req, resp) -> String.valueOf(Math.PI));
